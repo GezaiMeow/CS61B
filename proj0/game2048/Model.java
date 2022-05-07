@@ -173,10 +173,49 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        return (emptySpaceExists(b) || haveSameVal(b));
+    }
+
+    private static boolean haveSameVal(Board b){
+
+        int curVal;
+        Tile curTile;
+        for (int i = 1; i < b.size() - 1; i++){
+            for (int j = 1; j < b.size() - 1; j++){
+                if (validNeighbor(b, i, j)) {
+                    return true;
+                }
+            }
+        }
+
+        return checkCornerCase(b);
+    }
+
+    private static boolean checkCornerCase(Board b){
+        if (b.tile(0, 0).value() == b.tile(0, 1).value() ||
+                b.tile(0, 0).value() == b.tile(1, 0).value()){
+            return true;
+        }
+        if (b.tile(3, 0).value() == b.tile(3, 1).value() ||
+                b.tile(3, 0).value() == b.tile(2, 0).value()){
+            return true;
+        }
+        if (b.tile(0, 3).value() == b.tile(0, 2).value() ||
+                b.tile(0, 3).value() == b.tile(1, 3).value()){
+            return true;
+        }
+        if (b.tile(3, 3).value() == b.tile(3, 2).value() ||
+                b.tile(3, 3).value() == b.tile(2, 3).value()){
+            return true;
+        }
         return false;
     }
 
+    private static boolean  validNeighbor(Board b, int i , int j){
+        int curVal = b.tile(i, j).value();
+        return (curVal == b.tile(i - 1, j). value() || curVal == b.tile(i, j - 1).value() ||
+                curVal == b.tile(i, j + 1).value() || curVal == b.tile(i + 1, j).value());
+    }
 
     @Override
      /** Returns the model as a string, used for debugging. */
